@@ -1,0 +1,25 @@
+# Maven (carpeta donde se compila el proyecto)
+target/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+nb-configuration.xml
+nbactions.xml
+.nb-gradle/
+
+# Archivos de Java compilados
+*.class
+*.jar
+*.war
+
+# Logs
+*.log
+
+# Windows / otros editores
+Thumbs.db
+.DS_Store
+.idea/
+*.iml
+.vscode/
