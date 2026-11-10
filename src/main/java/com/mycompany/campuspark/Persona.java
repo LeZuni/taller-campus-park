@@ -1,9 +1,9 @@
 package com.mycompany.campuspark;
 
-/** Clase abstracta Persona */
+
 public abstract class Persona {
 
-    private int id;
+    private final int id;
     private String nombre;
     private int edad;
 
@@ -39,7 +39,6 @@ public abstract class Persona {
         this.edad = edad;
     }
 
-    /** cada hijo lo hace diferente */
     public abstract String descripcion();
 
     @Override

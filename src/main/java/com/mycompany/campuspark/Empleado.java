@@ -1,6 +1,5 @@
 package com.mycompany.campuspark;
 
-/** Empleado, hereda de Persona */
 public class Empleado extends Persona {
 
     private String cargo;

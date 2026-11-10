@@ -1,6 +1,5 @@
 package com.mycompany.campuspark;
 
-/** Atraccion infantil (edad maxima) */
 public class AtraccionInfantil extends Atraccion {
 
     private int edadMaxima;
@@ -37,7 +36,6 @@ public class AtraccionInfantil extends Atraccion {
         return "Infantil";
     }
 
-    /** aqui le hago el descuento del 10% */
     @Override
     public double calcularCosto(TipoTicket tipoTicket) {
         return super.calcularCosto(tipoTicket) * 0.90;

@@ -1,6 +1,5 @@
 package com.mycompany.campuspark;
 
-/** Registro de un mantenimiento */
 public class Mantenimiento {
 
     private String fecha;

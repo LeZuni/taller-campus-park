@@ -1,6 +1,6 @@
 package com.mycompany.campuspark;
 
-/** Atraccion acuatica (saber nadar) */
+
 public class AtraccionAcuatica extends Atraccion {
 
     private boolean requiereSaberNadar;
@@ -37,7 +37,6 @@ public class AtraccionAcuatica extends Atraccion {
         return "Acuática";
     }
 
-    /** se le suman 2 por la toalla */
     @Override
     public double calcularCosto(TipoTicket tipoTicket) {
         return super.calcularCosto(tipoTicket) + 2.0;

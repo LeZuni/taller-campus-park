@@ -8,29 +8,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-/** Clase principal con el menu */
 public class CampusPark {
 
     private static Parque parque = new Parque("CampusPark");
-    private static ImageIcon logo = null; // la imagen
+    private static ImageIcon logo = null;
 
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
         }
-        // cambio la letra
         UIManager.put("OptionPane.messageFont", new Font("Segoe UI", Font.PLAIN, 15));
         UIManager.put("OptionPane.buttonFont", new Font("Segoe UI", Font.BOLD, 14));
         UIManager.put("ComboBox.font", new Font("Segoe UI", Font.PLAIN, 15));
         UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 15));
 
-        // cargo el logo
         URL urlLogo = CampusPark.class.getResource("/logo.png");
-        if (urlLogo != null) {
-            ImageIcon original = new ImageIcon(urlLogo);
+        ImageIcon original = (urlLogo != null) ? new ImageIcon(urlLogo) : null;
+        if (original != null && original.getIconWidth() > 0 && original.getIconHeight() > 0) {
 
-            // fijo tamaño de la imagen
             int altoDeseado = 130;
             int anchoDeseado = original.getIconWidth() * altoDeseado / original.getIconHeight();
             Image reducida = original.getImage().getScaledInstance(anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
@@ -50,26 +46,25 @@ public class CampusPark {
             "Cambiar estado de una atracción",
             "Reportes (colas y recaudo total)",
             "Ver listados",
+            "Total gastado por visitante",
             "Salir"
         };
 
         boolean seguir = true;
         while (seguir) {
-            // menu con lista desplegable
             String textoMenu = "<html><div style='width:280px'>"
                     + "<span style='font-size:20px; color:#1565C0'><b>CampusPark</b></span><br>"
                     + "<span style='color:gray'>Sistema de gestión del parque de atracciones</span><br><br>"
                     + "¿Qué quieres hacer?<br>"
-                    + "<span style='color:#2E7D32'>Recaudo actual: <b>$" + String.format("%.2f", parque.getRecaudoTotal())
+                    + "<span style='color:#2E7D32'>Recaudo actual: <b>Q" + String.format("%.2f", parque.getRecaudoTotal())
                     + "</b></span></div></html>";
             Object elegida = JOptionPane.showInputDialog(null, textoMenu,
                     "CampusPark - Menú principal", JOptionPane.QUESTION_MESSAGE,
                     logo, opciones, opciones[0]);
 
-            if (elegida == null || elegida.equals("Salir")) { // salir
+            if (elegida == null || elegida.equals("Salir")) {
                 seguir = false;
             } else {
-                // busco que opcion es
                 int opcion = 0;
                 for (int i = 0; i < opciones.length; i++) {
                     if (opciones[i].equals(elegida)) {
@@ -115,19 +110,22 @@ public class CampusPark {
                 case 10:
                     verListados();
                     break;
+                case 11:
+                    mensaje(parque.reporteGastos());
+                    break;
                 case 0:
                     break;
                 default:
                     mensaje("Opción no válida.");
             }
         } catch (CancelarException e) {
-            // le dio cancelar, no hago nada
         } catch (IllegalArgumentException | IllegalStateException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "No se pudo", JOptionPane.WARNING_MESSAGE);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // opciones del menu
 
     private static void registrarVisitante() {
         String nombre = leerTexto("Nombre del visitante:");
@@ -161,7 +159,6 @@ public class CampusPark {
         double precio = leerDecimal("Precio base:");
         NivelRiesgo riesgo = leerRiesgo();
 
-        // creo la atraccion segun el tipo
         Atraccion nueva;
         if (tipo == 0) {
             int alturaMinima = leerEntero("Altura mínima en cm:");
@@ -262,13 +259,11 @@ public class CampusPark {
         }
     }
 
-    // elegir de las listas
 
     private static Visitante elegirVisitante() {
         if (parque.getVisitantes().isEmpty()) {
             throw new IllegalStateException("No hay visitantes registrados (opción 1).");
         }
-        // lista desplegable
         Object elegido = JOptionPane.showInputDialog(null, "Elige el visitante:", "Visitantes",
                 JOptionPane.QUESTION_MESSAGE, logo, parque.getVisitantes().toArray(), null);
         if (elegido == null) {
@@ -308,10 +303,9 @@ public class CampusPark {
         return NivelRiesgo.values()[eleccion];
     }
 
-    // leer datos
 
-    /** Para cuando le dan cancelar */
     private static class CancelarException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
     }
 
     private static String leerTexto(String pregunta) {
@@ -360,7 +354,6 @@ public class CampusPark {
         JOptionPane.showMessageDialog(null, texto, "CampusPark", JOptionPane.INFORMATION_MESSAGE, logo);
     }
 
-    // datos de prueba
 
     private static void cargarDatosDeEjemplo() {
         parque.registrarEmpleado("Carlos Pérez", 35, "Técnico de mantenimiento");

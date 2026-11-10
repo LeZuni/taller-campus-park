@@ -1,11 +1,12 @@
 package com.mycompany.campuspark;
 
-/** Visitante, hereda de Persona */
 public class Visitante extends Persona {
 
     private int alturaCm;
     private boolean sabeNadar;
-    private TipoTicket ticket; // si es null no ha comprado
+    private TipoTicket ticket;
+    private double totalGastado;
+    private int atraccionesUsadas;
 
     public Visitante(int id, String nombre, int edad, int alturaCm, boolean sabeNadar) {
         super(id, nombre, edad);
@@ -42,6 +43,19 @@ public class Visitante extends Persona {
 
     public boolean tieneTicket() {
         return ticket != null;
+    }
+
+    public double getTotalGastado() {
+        return totalGastado;
+    }
+
+    public int getAtraccionesUsadas() {
+        return atraccionesUsadas;
+    }
+
+    public void registrarGasto(double monto) {
+        totalGastado = totalGastado + monto;
+        atraccionesUsadas++;
     }
 
     @Override

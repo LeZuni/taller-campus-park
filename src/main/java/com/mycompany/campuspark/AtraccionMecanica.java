@@ -1,6 +1,5 @@
 package com.mycompany.campuspark;
 
-/** Atraccion mecanica (altura minima) */
 public class AtraccionMecanica extends Atraccion {
 
     private int alturaMinimaCm;
@@ -37,7 +36,6 @@ public class AtraccionMecanica extends Atraccion {
         return "Mecánica";
     }
 
-    /** recargo si es de riesgo alto */
     @Override
     public double calcularCosto(TipoTicket tipoTicket) {
         double costo = super.calcularCosto(tipoTicket);

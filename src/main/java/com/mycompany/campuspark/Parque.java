@@ -2,7 +2,6 @@ package com.mycompany.campuspark;
 
 import java.util.ArrayList;
 
-/** Clase Parque, aqui esta toda la logica */
 public class Parque {
 
     private String nombre;
@@ -23,7 +22,6 @@ public class Parque {
         this.siguienteIdAtraccion = 1;
     }
 
-    // registros
 
     public Visitante registrarVisitante(String nombre, int edad, int alturaCm, boolean sabeNadar) {
         Visitante v = new Visitante(siguienteIdPersona, nombre, edad, alturaCm, sabeNadar);
@@ -44,14 +42,12 @@ public class Parque {
         return a;
     }
 
-    /** id nuevo para las atracciones */
     public int nuevoIdAtraccion() {
         int id = siguienteIdAtraccion;
         siguienteIdAtraccion++;
         return id;
     }
 
-    // busquedas
 
     public Visitante buscarVisitante(int id) {
         for (Visitante v : visitantes) {
@@ -80,7 +76,6 @@ public class Parque {
         return null;
     }
 
-    // operaciones
 
     public void venderTicket(Visitante visitante, TipoTicket tipo) {
         visitante.setTicket(tipo);
@@ -104,7 +99,6 @@ public class Parque {
         atraccion.encolar(visitante);
     }
 
-    /** opera un turno y devuelve lo recaudado */
     public double operarAtraccion(Atraccion atraccion) {
         if (!atraccion.estaOperativa()) {
             throw new IllegalStateException("La atracción no está operativa (estado: "
@@ -118,7 +112,9 @@ public class Parque {
         int subieron = 0;
         while (subieron < atraccion.getCapacidadPorTurno() && atraccion.tamanoCola() > 0) {
             Visitante v = atraccion.desencolar();
-            recaudoTurno = recaudoTurno + atraccion.calcularCosto(v.getTicket());
+            double costo = atraccion.calcularCosto(v.getTicket());
+            v.registrarGasto(costo);
+            recaudoTurno = recaudoTurno + costo;
             subieron++;
         }
         recaudoTotal = recaudoTotal + recaudoTurno;
@@ -127,10 +123,9 @@ public class Parque {
 
     public void registrarMantenimiento(Atraccion atraccion, String fecha, Empleado responsable, String notas) {
         Mantenimiento m = new Mantenimiento(fecha, responsable, notas);
-        atraccion.registrarMantenimiento(m); // cambia a EN_MANTENIMIENTO
+        atraccion.registrarMantenimiento(m);
     }
 
-    // reportes
 
     public String reporteColas() {
         if (atracciones.isEmpty()) {
@@ -150,6 +145,21 @@ public class Parque {
 
     public String reporteRecaudo() {
         return "Recaudo total de " + nombre + ": $" + String.format("%.2f", recaudoTotal);
+    }
+
+    public String reporteGastos() {
+        if (visitantes.isEmpty()) {
+            return "No hay visitantes registrados.";
+        }
+        String texto = "=== GASTO POR VISITANTE ===\n";
+        double suma = 0;
+        for (Visitante v : visitantes) {
+            texto += "\n" + v.getNombre() + " - " + v.getAtraccionesUsadas() + " atracción(es): Q"
+                    + String.format("%.2f", v.getTotalGastado());
+            suma = suma + v.getTotalGastado();
+        }
+        texto += "\n\nTOTAL GASTADO: Q" + String.format("%.2f", suma);
+        return texto;
     }
 
     public String listarVisitantes() {
@@ -196,7 +206,6 @@ public class Parque {
         return texto;
     }
 
-    // getters
 
     public String getNombre() {
         return nombre;

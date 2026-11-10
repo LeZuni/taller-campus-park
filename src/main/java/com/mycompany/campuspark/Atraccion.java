@@ -2,7 +2,6 @@ package com.mycompany.campuspark;
 
 import java.util.ArrayList;
 
-/** Clase abstracta Atraccion */
 public abstract class Atraccion implements Inspeccionable, CalculableCosto {
 
     private int id;
@@ -25,20 +24,14 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
         this.mantenimientos = new ArrayList<>();
     }
 
-    // metodos abstractos (los hijos los hacen)
 
-    /** revisa si el visitante puede entrar */
     public abstract boolean puedeIngresar(Visitante visitante);
 
-    /** la restriccion en texto */
     public abstract String descripcionRestriccion();
 
-    /** el tipo de atraccion */
     public abstract String getTipo();
 
-    // costo
 
-    /** costo base, si es VIP se le quita el 20% */
     @Override
     public double calcularCosto(TipoTicket tipoTicket) {
         double costo = precioBase;
@@ -48,7 +41,6 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
         return costo;
     }
 
-    // cola
 
     public boolean estaOperativa() {
         return estado == EstadoAtraccion.OPERATIVA;
@@ -62,7 +54,6 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
         cola.add(visitante);
     }
 
-    /** saca al primero de la cola */
     public Visitante desencolar() {
         return cola.remove(0);
     }
@@ -75,7 +66,6 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
         return cola;
     }
 
-    // mantenimiento
 
     @Override
     public void registrarMantenimiento(Mantenimiento mantenimiento) {
@@ -88,7 +78,6 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
         return mantenimientos;
     }
 
-    // getters y setters
 
     public int getId() {
         return id;
@@ -153,7 +142,7 @@ public abstract class Atraccion implements Inspeccionable, CalculableCosto {
     public String toString() {
         return "#" + id + " " + nombre + " [" + getTipo() + "] - estado: " + estado
                 + ", riesgo: " + riesgo + ", capacidad: " + capacidadPorTurno
-                + ", precio base: $" + String.format("%.2f", precioBase)
+                + ", precio base:   Q" + String.format("%.2f", precioBase)
                 + ", restricción: " + descripcionRestriccion();
     }
 }
